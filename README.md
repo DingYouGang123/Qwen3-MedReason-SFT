@@ -12,8 +12,7 @@
 
 ```
 Qwen3_SFT/
-├── data/
-│   └── download.py       # 下载数据集并按 9:1 切分 train/val
+├── download.py       # 下载数据集并按 9:1 切分 train/val
 ├── train.py              # 训练脚本（支持全量微调 / LoRA，环境变量可切换）
 ├── evaluate.py           # 验证集离线定量评估（PPL / 格式合规率 / 语义相似度）
 ├── compare.py            # 一键评估 Baseline/A/B/C 并汇总对比表
@@ -76,7 +75,7 @@ NUM_SAMPLES=50 bash run_all.sh  # 评估阶段抽样 50 条快速验证流程
 **1. 准备数据**（在项目根目录执行，生成 `train.jsonl` / `val.jsonl`）
 
 ```bash
-python data/download.py
+python download.py
 ```
 
 **2. 训练**（用环境变量切换实验；不设则默认 1.7B 全量微调）
