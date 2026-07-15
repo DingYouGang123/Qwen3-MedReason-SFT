@@ -1,10 +1,12 @@
-from modelscope.msdatasets import MsDataset
+import os
+os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
+from datasets import load_dataset
 import json
 import random
 
 random.seed(42)
 
-ds = MsDataset.load('krisfu/delicate_medical_r1_data', subset_name='default', split='train')
+ds = load_dataset('krisfu/delicate_medical_r1_data', name='default', split='train')
 data_list = list(ds)
 random.shuffle(data_list)
 

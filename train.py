@@ -20,9 +20,10 @@ import json
 import pandas as pd
 import torch
 from datasets import Dataset
-from modelscope import snapshot_download, AutoTokenizer
+from modelscope import snapshot_download
 from transformers import (
     AutoModelForCausalLM,
+    AutoTokenizer,
     TrainingArguments,
     Trainer,
     DataCollatorForSeq2Seq,
@@ -54,7 +55,6 @@ _model_tag = MODEL_ID.split("/")[-1]
 _ft_tag = "lora" if USE_LORA else "full"
 RUN_NAME = f"{_model_tag}-{_ft_tag}"
 OUTPUT_DIR = os.path.join(os.environ.get("OUTPUT_ROOT", "output"), RUN_NAME)
-LOCAL_MODEL_DIR = os.path.join(CACHE_DIR, MODEL_ID)
 
 os.environ["SWANLAB_PROJECT"] = "qwen3-sft-medical"
 set_seed(SEED)
@@ -141,12 +141,12 @@ def main():
     })
 
     # 下载并加载模型/分词器
-    snapshot_download(MODEL_ID, cache_dir=CACHE_DIR, revision="master")
+    model_dir = snapshot_download(MODEL_ID, cache_dir=CACHE_DIR, revision="master")
     tokenizer = AutoTokenizer.from_pretrained(
-        LOCAL_MODEL_DIR, use_fast=False, trust_remote_code=True
+        model_dir, use_fast=False, trust_remote_code=True
     )
     model = AutoModelForCausalLM.from_pretrained(
-        LOCAL_MODEL_DIR, device_map="auto", torch_dtype=torch.bfloat16
+        model_dir, device_map="auto", torch_dtype=torch.bfloat16
     )
     model.enable_input_require_grads()  # 梯度检查点需要
     model.config.use_cache = False       # 与 gradient_checkpointing 兼容
