@@ -32,10 +32,10 @@ import swanlab
 
 # ==================== 实验配置====================
 # 环境变量优先，便于 run_all.sh 串联多组实验：
-#   MODEL_ID / CACHE_DIR / USE_LORA(true|false)
+#   MODEL_ID / CACHE_DIR / OUTPUT_ROOT / USE_LORA(true|false)
 SEED = 42
 MODEL_ID = os.environ.get("MODEL_ID", "Qwen/Qwen3-1.7B")   
-CACHE_DIR = os.environ.get("CACHE_DIR", "/root/autodl-tmp/")  
+CACHE_DIR = os.environ.get("CACHE_DIR", "models")  
 USE_LORA = os.environ.get("USE_LORA", "false").lower() == "true"  
 
 PROMPT = "你是一个医学专家，你需要根据用户的问题，给出带有思考的回答。"
@@ -53,7 +53,7 @@ VAL_FORMAT_PATH = "val_format.jsonl"
 _model_tag = MODEL_ID.split("/")[-1]
 _ft_tag = "lora" if USE_LORA else "full"
 RUN_NAME = f"{_model_tag}-{_ft_tag}"
-OUTPUT_DIR = f"/root/autodl-tmp/output/{RUN_NAME}"
+OUTPUT_DIR = os.path.join(os.environ.get("OUTPUT_ROOT", "output"), RUN_NAME)
 LOCAL_MODEL_DIR = os.path.join(CACHE_DIR, MODEL_ID)
 
 os.environ["SWANLAB_PROJECT"] = "qwen3-sft-medical"

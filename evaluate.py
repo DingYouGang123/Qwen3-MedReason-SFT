@@ -10,10 +10,10 @@ Qwen3 医学推理对话大模型 - 验证集离线定量评估脚本
 
 用法示例：
     # 评估某个微调 checkpoint
-    python evaluate.py --model_path /root/autodl-tmp/output/Qwen3-1.7B-full/best
+    python evaluate.py --model_path output/Qwen3-1.7B-full/best
 
     # 评估原始模型作为 Baseline
-    python evaluate.py --model_path /root/autodl-tmp/Qwen/Qwen3-1.7B --tag baseline
+    python evaluate.py --model_path models/Qwen/Qwen3-1.7B --tag baseline
 
     # 仅抽样 50 条快速评估
     python evaluate.py --model_path <path> --num_samples 50

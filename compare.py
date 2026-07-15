@@ -28,10 +28,10 @@ from evaluate import evaluate
 # ==================== 对照实验清单（按需修改路径） ====================
 # tag 用于结果文件命名与表格行名；model_path 为待评估权重目录。
 EXPERIMENTS = [
-    {"tag": "baseline",       "model_path": "/root/autodl-tmp/Qwen/Qwen3-1.7B"},
-    {"tag": "expA-1.7B-full", "model_path": "/root/autodl-tmp/output/Qwen3-1.7B-full/best"},
-    {"tag": "expB-1.7B-lora", "model_path": "/root/autodl-tmp/output/Qwen3-1.7B-lora/best"},
-    {"tag": "expC-8B-lora",   "model_path": "/root/autodl-tmp/output/Qwen3-8B-lora/best"},
+    {"tag": "baseline",       "model_path": "models/Qwen/Qwen3-1.7B"},
+    {"tag": "expA-1.7B-full", "model_path": "output/Qwen3-1.7B-full/best"},
+    {"tag": "expB-1.7B-lora", "model_path": "output/Qwen3-1.7B-lora/best"},
+    {"tag": "expC-8B-lora",   "model_path": "output/Qwen3-8B-lora/best"},
 ]
 
 # 汇总表展示的指标列（key -> 表头）

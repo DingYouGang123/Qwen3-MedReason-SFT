@@ -12,7 +12,7 @@
 
 ```
 Qwen3_SFT/
-├── download.py       # 下载数据集并按 9:1 切分 train/val
+├── download.py           # 下载数据集并按 9:1 切分 train/val
 ├── train.py              # 训练脚本（支持全量微调 / LoRA，环境变量可切换）
 ├── evaluate.py           # 验证集离线定量评估（PPL / 格式合规率 / 语义相似度）
 ├── compare.py            # 一键评估 Baseline/A/B/C 并汇总对比表
@@ -86,15 +86,15 @@ USE_LORA=true  MODEL_ID="Qwen/Qwen3-1.7B" python train.py   # Exp B
 USE_LORA=true  MODEL_ID="Qwen/Qwen3-8B"  python train.py   # Exp C
 ```
 
-训练结束，最优权重保存到 `/root/autodl-tmp/output/<run_name>/best`。
+训练结束，最优权重保存到 `output/<run_name>/best`。
 
 **3. 评估单个模型**（`evaluate.py` 一次只评估一个模型，下面仅为两种路径写法示例）
 
 ```bash
 # 微调模型（以 Exp A 为例，B/C 同理，换成对应 best 目录即可）
-python evaluate.py --model_path /root/autodl-tmp/output/Qwen3-1.7B-full/best
+python evaluate.py --model_path output/Qwen3-1.7B-full/best
 # Baseline（原始模型）
-python evaluate.py --model_path /root/autodl-tmp/Qwen/Qwen3-1.7B --tag baseline
+python evaluate.py --model_path models/Qwen/Qwen3-1.7B --tag baseline
 ```
 
 > 要一次性评估 **Baseline/A/B/C 全部 4 个** 并出对比表，用下一步的 `compare.py`，无需逐个手动跑。
@@ -117,7 +117,7 @@ python compare.py --from_cache   # 仅从已有 eval_results_*.json 汇总
 **5. 人工抽查**
 
 ```bash
-python predict.py --model_path /root/autodl-tmp/output/Qwen3-1.7B-full/best \
+python predict.py --model_path output/Qwen3-1.7B-full/best \
                   --question "我最近血糖偏高，饮食上应该注意什么？"
 ```
 
@@ -143,8 +143,8 @@ python predict.py --model_path /root/autodl-tmp/output/Qwen3-1.7B-full/best \
 
 ## 关键配置说明
 
-- **模型下载目录**：`train.py` 中 `CACHE_DIR`（默认 `/root/autodl-tmp/`），也可用环境变量 `CACHE_DIR` 覆盖。
-- **输出目录**：`/root/autodl-tmp/output/<模型名>-<full|lora>/`，最优权重在其下 `best/`。
+- **模型下载目录**：`train.py` 中 `CACHE_DIR`（默认 `models/`，即项目根目录下），也可用环境变量 `CACHE_DIR` 覆盖（如 AutoDL 大数据盘 `CACHE_DIR=/root/autodl-tmp/`）。
+- **输出目录**：`output/<模型名>-<full|lora>/`（项目根目录下，可用环境变量 `OUTPUT_ROOT` 覆盖），最优权重在其下 `best/`。
 - **Baseline 路径**：`compare.py` 中 `baseline` 指向 `snapshot_download` 落盘的原始模型目录，
   首次运行 `train.py` 后即存在，如与实际不符请修改 `EXPERIMENTS`。
 

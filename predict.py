@@ -9,7 +9,7 @@ Qwen3 医学推理对话大模型 - 单条推理 / 人工抽查脚本
     - LoRA adapter 目录（自动加载基座并合并）。
 
 用法：
-    python predict.py --model_path /root/autodl-tmp/output/Qwen3-1.7B-full/best
+    python predict.py --model_path output/Qwen3-1.7B-full/best
     python predict.py --model_path <path> --question "我血糖偏高应该注意什么？"
 """
 
@@ -21,7 +21,7 @@ PROMPT = "你是一个医学专家，你需要根据用户的问题，给出带�
 MAX_NEW_TOKENS = 2048
 
 # 默认权重路径：与 train.py 的 OUTPUT_DIR/best 保持一致
-DEFAULT_MODEL_PATH = "/root/autodl-tmp/output/Qwen3-1.7B-full/best"
+DEFAULT_MODEL_PATH = "output/Qwen3-1.7B-full/best"
 DEFAULT_QUESTION = (
     "医生，我最近被诊断为糖尿病，听说碳水化合物的选择很重要，"
     "我应该选择什么样的碳水化合物呢？"
