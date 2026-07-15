@@ -21,7 +21,7 @@ echo "==================== [0/5] 环境与数据准备 ===================="
 if [ ! -f "train.jsonl" ] || [ ! -f "val.jsonl" ]; then
     echo "[data] 下载并切分数据集..."
     # download.py 使用相对路径写入当前工作目录，故从项目根目录执行，直接生成到根目录
-    python data/download.py
+    python download.py
 else
     echo "[data] 已存在 train.jsonl / val.jsonl，跳过下载。"
 fi
