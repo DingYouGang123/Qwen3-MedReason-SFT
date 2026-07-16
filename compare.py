@@ -23,12 +23,25 @@ import os
 import json
 import argparse
 
+from modelscope import snapshot_download
 from evaluate import evaluate
 
 # ==================== 对照实验清单（按需修改路径） ====================
 # tag 用于结果文件命名与表格行名；model_path 为待评估权重目录。
+# baseline 通过 snapshot_download 动态解析，避免硬编码路径与实际缓存不一致。
+CACHE_DIR = os.environ.get("CACHE_DIR", "models")
+_BASELINE_ID = "Qwen/Qwen3-1.7B"
+
+def _resolve_baseline_path():
+    """通过 snapshot_download 获取 baseline 模型的实际本地路径。"""
+    try:
+        return snapshot_download(_BASELINE_ID, cache_dir=CACHE_DIR, revision="master")
+    except Exception as e:
+        print(f"[warn] 无法解析 baseline 路径: {e}")
+        return os.path.join(CACHE_DIR, _BASELINE_ID)
+
 EXPERIMENTS = [
-    {"tag": "baseline",       "model_path": "models/Qwen/Qwen3-1.7B"},
+    {"tag": "baseline",       "model_path": _resolve_baseline_path()},
     {"tag": "expA-1.7B-full", "model_path": "output/Qwen3-1.7B-full/best"},
     {"tag": "expB-1.7B-lora", "model_path": "output/Qwen3-1.7B-lora/best"},
     {"tag": "expC-8B-lora",   "model_path": "output/Qwen3-8B-lora/best"},

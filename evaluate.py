@@ -122,17 +122,16 @@ def compute_sample_ppl(model, tokenizer, user_input: str, target_output: str):
 def load_embedder():
     """加载 Qwen3-Embedding 模型；未安装 sentence-transformers 时返回 None。
 
+    通过 ModelScope snapshot_download 下载，避免直连 HuggingFace 导致国内网络超时。
     需要 transformers>=4.51.0 与 sentence-transformers>=2.7.0。
-    如需加速/省显存，可在 model_kwargs 中启用 flash_attention_2：
-        SentenceTransformer(
-            EMBED_MODEL_ID,
-            model_kwargs={"attn_implementation": "flash_attention_2", "device_map": "auto"},
-            tokenizer_kwargs={"padding_side": "left"},
-        )
     """
     try:
+        from modelscope import snapshot_download
         from sentence_transformers import SentenceTransformer
-        return SentenceTransformer(EMBED_MODEL_ID, device=DEVICE)
+
+        cache_dir = os.environ.get("CACHE_DIR", "models")
+        embed_local_path = snapshot_download(EMBED_MODEL_ID, cache_dir=cache_dir, revision="master")
+        return SentenceTransformer(embed_local_path, device=DEVICE)
     except Exception as e:  # noqa: BLE001
         print(f"[warn] 语义相似度不可用（{e}）；将跳过该指标。")
         return None

@@ -56,7 +56,6 @@ _ft_tag = "lora" if USE_LORA else "full"
 RUN_NAME = f"{_model_tag}-{_ft_tag}"
 OUTPUT_DIR = os.path.join(os.environ.get("OUTPUT_ROOT", "output"), RUN_NAME)
 
-os.environ["SWANLAB_PROJECT"] = "qwen3-sft-medical"
 set_seed(SEED)
 
 
@@ -131,6 +130,10 @@ def build_process_func(tokenizer):
 
 
 def main():
+    swanlab.init(
+        project=os.environ.get("SWANLAB_PROJECT", "qwen3-sft-medical"),
+        experiment_name=RUN_NAME,
+    )
     swanlab.config.update({
         "model": MODEL_ID,
         "prompt": PROMPT,
@@ -204,7 +207,7 @@ def main():
         eval_steps=100,
         save_strategy="steps",
         save_steps=100,                       # 与 eval_steps 对齐
-        save_total_limit=3,
+        save_total_limit=1,                   # 仅保留1个checkpoint，节省磁盘（配合load_best_model_at_end）
         logging_steps=10,
         load_best_model_at_end=True,          # 自动选取最优 checkpoint
         metric_for_best_model="eval_loss",
